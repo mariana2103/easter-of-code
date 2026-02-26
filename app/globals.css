@@ -1,26 +1,91 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #e4e4e7;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
-body {
+html, body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+
+/* Selection */
+::selection { background: rgba(34, 197, 94, 0.2); color: #dcfce7; }
+
+/* Scanline overlay */
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Prose-like code block styling for challenge descriptions */
+.challenge-body h1,
+.challenge-body h2,
+.challenge-body h3 {
+  color: #a1a1aa;
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.875rem;
+}
+.challenge-body p {
+  color: #d4d4d8;
+  margin: 0.5rem 0;
+  line-height: 1.75;
+  font-size: 0.8125rem;
+}
+.challenge-body code {
+  background: #18181b;
+  border: 1px solid #27272a;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  color: #86efac;
+}
+.challenge-body pre {
+  background: #09090b;
+  border: 1px solid #27272a;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+.challenge-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.challenge-body ul, .challenge-body ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  color: #d4d4d8;
+  font-size: 0.8125rem;
+  line-height: 1.75;
 }
