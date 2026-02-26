@@ -23,8 +23,8 @@ export function Countdown({ target, label = "starts in" }: CountdownProps) {
 
   if (diff <= 0) {
     return (
-      <span className="font-mono text-green-400 text-sm">
-        <span className="text-zinc-500">// </span>live now
+      <span className="font-mono text-hacker-green text-sm">
+        <span className="text-main-grey">// </span>live now
       </span>
     );
   }
@@ -37,20 +37,20 @@ export function Countdown({ target, label = "starts in" }: CountdownProps) {
 
   return (
     <div className="font-mono text-sm space-y-1">
-      <div className="text-zinc-500 text-xs">{"// " + label}</div>
+      <div className="text-main-grey text-xs">{"// " + label}</div>
       <div className="flex items-center gap-1 text-zinc-200">
         {d > 0 && (
           <>
-            <span className="text-purple-400">{pad(d)}</span>
-            <span className="text-zinc-600">d </span>
+            <span className="text-hacker-purple">{pad(d)}</span>
+            <span className="text-light-grey">d </span>
           </>
         )}
-        <span className="text-green-400">{pad(h)}</span>
-        <span className="text-zinc-600">h </span>
-        <span className="text-green-400">{pad(m)}</span>
-        <span className="text-zinc-600">m </span>
-        <span className="text-green-400">{pad(s)}</span>
-        <span className="text-zinc-600">s</span>
+        <span className="text-hacker-green">{pad(h)}</span>
+        <span className="text-light-grey">h </span>
+        <span className="text-hacker-green">{pad(m)}</span>
+        <span className="text-light-grey">m </span>
+        <span className="text-hacker-green">{pad(s)}</span>
+        <span className="text-light-grey">s</span>
       </div>
     </div>
   );

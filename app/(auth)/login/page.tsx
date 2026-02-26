@@ -29,40 +29,40 @@ export default function LoginPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-1">
-        <Link href="/" className="block font-mono text-xs text-zinc-600 mb-4 hover:text-zinc-400">
-          {"← acm{hack}"}
+        <Link href="/" className="block font-mono text-xs text-light-grey mb-4 hover:text-main-grey">
+          {"← Easter of code"}
         </Link>
-        <div className="font-mono text-xs text-zinc-600">{"// authenticate"}</div>
+        <div className="font-mono text-xs text-light-grey">{"// authenticate"}</div>
         <h1 className="font-mono text-xl text-zinc-100">
-          <span className="text-purple-400">function</span>{" "}
-          <span className="text-green-400">login</span>
-          <span className="text-zinc-500">() {"{"}</span>
+          <span className="text-hacker-purple">function</span>{" "}
+          <span className="text-hacker-green">login</span>
+          <span className="text-main-grey">() {"{"}</span>
         </h1>
       </div>
 
       {/* Form */}
       <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-4">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-zinc-500">email</label>
+          <label className="font-mono text-xs text-main-grey">email</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@university.edu"
             required
-            className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:ring-1 focus:ring-green-500/30 focus:border-green-500/40 transition-colors"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-light-grey focus:outline-none focus:ring-1 focus:ring-green-500/30 focus:border-green-500/40 transition-colors"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="font-mono text-xs text-zinc-500">password</label>
+          <label className="font-mono text-xs text-main-grey">password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
-            className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:ring-1 focus:ring-green-500/30 focus:border-green-500/40 transition-colors"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-light-grey focus:outline-none focus:ring-1 focus:ring-green-500/30 focus:border-green-500/40 transition-colors"
           />
         </div>
 
@@ -77,7 +77,7 @@ export default function LoginPage() {
           disabled={isPending}
           className={cn(
             "w-full font-mono text-sm py-2.5 rounded border transition-all",
-            "bg-green-500/10 text-green-400 border-green-500/30",
+            "bg-green-500/10 text-hacker-green border-green-500/30",
             "hover:bg-green-500/20 hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10",
             "disabled:opacity-40 disabled:cursor-not-allowed"
           )}
@@ -86,10 +86,10 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <div className="font-mono text-xs text-zinc-600">
-        <span className="text-zinc-500">{"}"}</span>
+      <div className="font-mono text-xs text-light-grey">
+        <span className="text-main-grey">{"}"}</span>
         {"  // no account? "}
-        <Link href="/register" className="text-purple-400 hover:text-purple-300 transition-colors">
+        <Link href="/register" className="text-hacker-purple hover:text-purple-300 transition-colors">
           register()
         </Link>
       </div>

@@ -23,9 +23,9 @@ const rankColors = [
 export function LeaderboardTable({ entries, currentUserId }: LeaderboardTableProps) {
   if (entries.length === 0) {
     return (
-      <div className="font-mono text-sm text-zinc-600 text-center py-12">
-        <div className="text-zinc-700 mb-2">{"{ leaderboard: [] }"}</div>
-        <div className="text-xs text-zinc-700">{"// no submissions yet"}</div>
+      <div className="font-mono text-sm text-light-grey text-center py-12">
+        <div className="text-light-grey mb-2">{"{ leaderboard: [] }"}</div>
+        <div className="text-xs text-light-grey">{"// no submissions yet"}</div>
       </div>
     );
   }
@@ -35,7 +35,7 @@ export function LeaderboardTable({ entries, currentUserId }: LeaderboardTablePro
       {/* Header */}
       <div className="grid grid-cols-[3rem_1fr_auto_auto_auto] gap-4 px-4 py-2 border-b border-zinc-800 bg-zinc-900/50">
         {["rank", "user", "solved", "pts", "last_correct"].map((h) => (
-          <div key={h} className="font-mono text-xs text-zinc-600">
+          <div key={h} className="font-mono text-xs text-light-grey">
             {h}
           </div>
         ))}
@@ -56,7 +56,7 @@ export function LeaderboardTable({ entries, currentUserId }: LeaderboardTablePro
             <div
               className={cn(
                 "font-mono text-sm font-bold",
-                rankColors[entry.rank - 1] ?? "text-zinc-500"
+                rankColors[entry.rank - 1] ?? "text-main-grey"
               )}
             >
               #{entry.rank}
@@ -64,7 +64,7 @@ export function LeaderboardTable({ entries, currentUserId }: LeaderboardTablePro
 
             {/* Username */}
             <div className="font-mono text-sm">
-              <span className="text-zinc-600">@</span>
+              <span className="text-light-grey">@</span>
               <span className={isCurrentUser ? "text-purple-300" : "text-zinc-200"}>
                 {entry.username}
               </span>
@@ -74,18 +74,18 @@ export function LeaderboardTable({ entries, currentUserId }: LeaderboardTablePro
             </div>
 
             {/* Solved count */}
-            <div className="font-mono text-sm text-zinc-400">
+            <div className="font-mono text-sm text-main-grey">
               {entry.solvedCount}
-              <span className="text-zinc-700 text-xs"> solved</span>
+              <span className="text-light-grey text-xs"> solved</span>
             </div>
 
             {/* Points */}
-            <div className="font-mono text-sm text-green-400 font-semibold">
+            <div className="font-mono text-sm text-hacker-green font-semibold">
               {entry.totalPoints.toLocaleString()}
             </div>
 
             {/* Last correct */}
-            <div className="font-mono text-xs text-zinc-600">
+            <div className="font-mono text-xs text-light-grey">
               {entry.lastCorrectAt
                 ? entry.lastCorrectAt.toLocaleString(undefined, {
                     month: "short",

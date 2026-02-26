@@ -31,6 +31,7 @@ interface D1ExecResult {
 interface CloudflareEnv {
   DB: D1Database;
   ASSETS: Fetcher;
+  ANALYTICS: AnalyticsEngineDataset;
 }
 
 interface Fetcher {

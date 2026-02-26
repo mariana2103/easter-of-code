@@ -35,17 +35,17 @@ export function SubmissionForm({
   if (alreadySolved || (result?.success && result.correct)) {
     return (
       <div className="border border-green-500/30 bg-green-500/5 rounded-lg p-4 font-mono">
-        <div className="text-green-400 text-sm mb-1">{"✓ correct"}</div>
+        <div className="text-hacker-green text-sm mb-1">{"✓ correct"}</div>
         {result?.success && result.correct && (
-          <div className="text-zinc-400 text-xs">
+          <div className="text-main-grey text-xs">
             {"// points_awarded: "}
-            <span className="text-purple-400">+{result.pointsAwarded}</span>
+            <span className="text-hacker-purple">+{result.pointsAwarded}</span>
             {" // attempt: "}
             <span className="text-zinc-300">#{result.attemptNumber}</span>
           </div>
         )}
         {alreadySolved && !result && (
-          <div className="text-zinc-500 text-xs">{"// already_solved"}</div>
+          <div className="text-main-grey text-xs">{"// already_solved"}</div>
         )}
       </div>
     );
@@ -55,7 +55,7 @@ export function SubmissionForm({
     <div className="space-y-3">
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-1">
-          <label className="font-mono text-xs text-zinc-500">
+          <label className="font-mono text-xs text-main-grey">
             {"// submit_answer"}
           </label>
           <div className="flex gap-2">
@@ -67,7 +67,7 @@ export function SubmissionForm({
               disabled={isPending}
               className={cn(
                 "flex-1 bg-zinc-900 border rounded px-3 py-2 font-mono text-sm text-zinc-200",
-                "placeholder:text-zinc-700 focus:outline-none focus:ring-1 transition-colors",
+                "placeholder:text-light-grey focus:outline-none focus:ring-1 transition-colors",
                 result?.success === false && result.error === "wrong"
                   ? "border-red-500/40 focus:ring-red-500/30 focus:border-red-500/60"
                   : result?.success && !result.correct
@@ -81,7 +81,7 @@ export function SubmissionForm({
               className={cn(
                 "font-mono text-sm px-4 py-2 rounded border transition-colors",
                 "disabled:opacity-40 disabled:cursor-not-allowed",
-                "bg-green-500/10 text-green-400 border-green-500/30",
+                "bg-green-500/10 text-hacker-green border-green-500/30",
                 "hover:bg-green-500/20 hover:border-green-500/50"
               )}
             >
@@ -99,7 +99,7 @@ export function SubmissionForm({
             result.success && !result.correct
               ? "border-red-500/30 bg-red-500/5 text-red-400"
               : !result.success && result.error === "already_solved"
-              ? "border-green-500/30 bg-green-500/5 text-green-400"
+              ? "border-green-500/30 bg-green-500/5 text-hacker-green"
               : "border-red-500/30 bg-red-500/5 text-red-400"
           )}
         >
@@ -107,12 +107,12 @@ export function SubmissionForm({
             <span>
               {"✗ wrong_answer"}
               {" // attempt: "}
-              <span className="text-zinc-400">#{result.attemptNumber}</span>
+              <span className="text-main-grey">#{result.attemptNumber}</span>
               {" — try again"}
             </span>
           )}
           {!result.success && result.error === "already_solved" && (
-            <span className="text-green-400">{"✓ already_solved"}</span>
+            <span className="text-hacker-green">{"✓ already_solved"}</span>
           )}
           {!result.success && result.error === "not_authenticated" && (
             <span>{"error: not_authenticated — please login"}</span>
@@ -131,7 +131,7 @@ export function SubmissionForm({
 
       {/* Attempt counter */}
       {initialAttempts > 0 && !(result?.success && !result.correct) && (
-        <div className="font-mono text-xs text-zinc-600">
+        <div className="font-mono text-xs text-light-grey">
           {`// previous_attempts: ${initialAttempts}`}
         </div>
       )}

@@ -1,27 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-// Protect all (main) routes — require a valid session cookie
-const PROTECTED = ["/challenges", "/leaderboard", "/profile"];
-const ADMIN_ONLY = ["/admin"];
+// Páginas que requerem autenticação
+const PRIVATE = ["/profile", "/admin"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isProtected = PROTECTED.some((p) => pathname.startsWith(p));
-  const isAdmin = ADMIN_ONLY.some((p) => pathname.startsWith(p));
+  // --- 1. Lógica de Analytics (Corre para TODAS as páginas do matcher) ---
+  try {
+    const { env } = await getCloudflareContext({ async: true });
+    if (env.ANALYTICS) {
+      env.ANALYTICS.writeDataPoint({
+        blobs: [
+          'pageview', 
+          pathname, 
+          request.headers.get('cf-ipcountry') || 'XX'
+        ],
+        doubles: [1],
+        indexes: [crypto.randomUUID()]
+      });
+    }
+  } catch (e) {
+    // Falha silenciosa no analytics para não bloquear o site
+    console.error("Analytics Error:", e);
+  }
 
-  if (isProtected || isAdmin) {
-    // Better Auth sets a "better-auth.session_token" cookie
-    const sessionCookie = request.cookies.get("better-auth.session_token");
-    if (!sessionCookie) {
+  // --- 2. Lógica de Autenticação (A tua lógica original) ---
+  if (PRIVATE.some((p) => pathname.startsWith(p))) {
+    const cookieHeader = request.headers.get("cookie") ?? "";
+    const hasSession = cookieHeader.includes("better-auth.session_token=");
+
+    if (!hasSession) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
+
   return NextResponse.next();
 }
 
+// --- 3. Atualização do Matcher ---
 export const config = {
-  matcher: ["/challenges/:path*", "/leaderboard/:path*", "/profile/:path*", "/admin/:path*"],
+  matcher: [
+    /*
+     * Protege as rotas privadas mas também permite ao middleware
+     * correr em páginas públicas para o Analytics funcionar.
+     */
+    "/profile/:path*", 
+    "/admin/:path*",
+    "/",               // Home
+    "/challenges/:path*", 
+    "/leaderboard/:path*"
+  ],
 };

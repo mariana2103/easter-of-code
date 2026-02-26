@@ -10,9 +10,9 @@ interface ChallengeCardProps {
 
 const typeStyles = {
   easy: {
-    badge: "text-green-400 border-green-500/30 bg-green-500/10",
+    badge: "text-hacker-green border-green-500/30 bg-green-500/10",
     glow: "hover:border-green-500/40 hover:shadow-green-500/5",
-    accent: "text-green-400",
+    accent: "text-hacker-green",
   },
   hard: {
     badge: "text-red-400 border-red-500/30 bg-red-500/10",
@@ -56,12 +56,12 @@ export function ChallengeCard({ challenge, solved, attempted }: ChallengeCardPro
           >
             {`<${challenge.type} />`}
           </span>
-          <span className="font-mono text-xs text-zinc-700">
+          <span className="font-mono text-xs text-light-grey">
             {formatUnlockDelta(challenge.unlocksAt, now)}
           </span>
         </div>
-        <div className="font-mono text-xs text-zinc-700 mb-1">{`// day_${challenge.day}`}</div>
-        <div className="font-mono text-sm text-zinc-700">{"???"}</div>
+        <div className="font-mono text-xs text-light-grey mb-1">{`// day_${challenge.day}`}</div>
+        <div className="font-mono text-sm text-light-grey">{"???"}</div>
         <div className="mt-3 font-mono text-[10px] text-zinc-800">
           {challenge.unlocksAt.toLocaleString(undefined, {
             month: "short",
@@ -90,35 +90,35 @@ export function ChallengeCard({ challenge, solved, attempted }: ChallengeCardPro
           {`<${challenge.type} />`}
         </span>
         {solved ? (
-          <span className="font-mono text-xs text-green-400">✓ solved</span>
+          <span className="font-mono text-xs text-hacker-green">✓ solved</span>
         ) : attempted ? (
           <span className="font-mono text-xs text-amber-400">~ attempted</span>
         ) : (
-          <span className="font-mono text-xs text-zinc-600">open</span>
+          <span className="font-mono text-xs text-light-grey">open</span>
         )}
       </div>
 
       {/* Sponsor line */}
       {challenge.sponsorName && (
-        <div className="font-mono text-xs text-zinc-600 mb-1">
+        <div className="font-mono text-xs text-light-grey mb-1">
           {`/* sponsored by ${challenge.sponsorName} */`}
         </div>
       )}
 
       {/* Day + title */}
-      <div className="font-mono text-xs text-zinc-600 mb-1">{`// day_${challenge.day}`}</div>
+      <div className="font-mono text-xs text-light-grey mb-1">{`// day_${challenge.day}`}</div>
       <div className={cn("font-mono text-sm font-medium", styles.accent)}>
         {challenge.title}
       </div>
 
       {/* Points */}
       <div className="mt-3 flex items-center gap-2">
-        <span className="font-mono text-xs text-zinc-500">
+        <span className="font-mono text-xs text-main-grey">
           {challenge.basePoints}
-          <span className="text-zinc-700"> base_pts</span>
+          <span className="text-light-grey"> base_pts</span>
         </span>
-        <span className="text-zinc-700 text-xs">+</span>
-        <span className="font-mono text-xs text-zinc-600">time_bonus</span>
+        <span className="text-light-grey text-xs">+</span>
+        <span className="font-mono text-xs text-light-grey">time_bonus</span>
       </div>
     </Link>
   );

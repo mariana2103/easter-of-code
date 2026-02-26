@@ -52,41 +52,41 @@ export default async function ProfilePage() {
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
       {/* Header */}
       <div>
-        <div className="font-mono text-xs text-zinc-600 mb-1">{"// profile"}</div>
+        <div className="font-mono text-xs text-light-grey mb-1">{"// profile"}</div>
         <h1 className="font-mono text-2xl text-zinc-200">
-          <span className="text-zinc-600">@</span>
-          <span className="text-green-400">{session.user.name ?? session.user.email}</span>
+          <span className="text-main-grey">@</span>
+          <span className="text-hacker-green">{session.user.name ?? session.user.email}</span>
         </h1>
-        <div className="font-mono text-xs text-zinc-600 mt-1">{session.user.email}</div>
+        <div className="font-mono text-xs text-main-grey mt-1">{session.user.email}</div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "total_pts", value: totalPoints.toLocaleString(), color: "text-green-400" },
-          { label: "solved", value: String(solvedCount), color: "text-purple-400" },
-          { label: "attempts", value: String(subs.length), color: "text-zinc-300" },
+          { label: "total_pts", value: totalPoints.toLocaleString(), color: "text-hacker-green" },
+          { label: "solved", value: String(solvedCount), color: "text-hacker-purple" },
+          { label: "attempts", value: String(subs.length), color: "text-main-grey" },
         ].map((stat) => (
           <div
             key={stat.label}
             className="border border-zinc-800 rounded-lg p-4 bg-zinc-950 text-center"
           >
             <div className={`font-mono text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-            <div className="font-mono text-xs text-zinc-600 mt-1">{stat.label}</div>
+            <div className="font-mono text-xs text-light-grey mt-1">{stat.label}</div>
           </div>
         ))}
       </div>
 
       {/* Submission history */}
       <div>
-        <div className="font-mono text-xs text-zinc-600 mb-3">{"// submission_history"}</div>
+        <div className="font-mono text-xs text-main-grey mb-3">{"// submission_history"}</div>
         {subs.length === 0 ? (
-          <div className="border border-zinc-800 rounded-lg p-8 text-center font-mono text-xs text-zinc-700">
+          <div className="border border-zinc-800 rounded-lg p-8 text-center font-mono text-xs text-light-grey">
             {"// no submissions yet"}
           </div>
         ) : (
           <div className="border border-zinc-800 rounded-lg overflow-hidden">
-            <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-3 px-4 py-2 border-b border-zinc-800 bg-zinc-900/50 font-mono text-xs text-zinc-600">
+            <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-3 px-4 py-2 border-b border-zinc-800 bg-zinc-900/50 font-mono text-xs text-light-grey">
               {["day", "challenge", "type", "result", "pts"].map((h) => (
                 <div key={h}>{h}</div>
               ))}
@@ -96,8 +96,8 @@ export default async function ProfilePage() {
                 key={submission.id}
                 className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-3 px-4 py-2.5 border-b border-zinc-800/50 last:border-0 font-mono text-xs hover:bg-zinc-900/20 transition-colors"
               >
-                <div className="text-zinc-600">d{challenge.day}</div>
-                <div className="text-zinc-400 truncate">{challenge.title}</div>
+                <div className="text-light-grey">{challenge.day}</div>
+                <div className="text-main-grey truncate">{challenge.title}</div>
                 <div
                   className={
                     challenge.type === "easy"
@@ -111,16 +111,16 @@ export default async function ProfilePage() {
                 </div>
                 <div>
                   {submission.isCorrect ? (
-                    <span className="text-green-400">✓</span>
+                    <span className="text-hacker-green">✓</span>
                   ) : (
                     <span className="text-red-400">✗</span>
                   )}
                 </div>
-                <div className="text-zinc-400">
+                <div className="text-main-grey">
                   {submission.isCorrect ? (
-                    <span className="text-green-400">+{submission.pointsAwarded}</span>
+                    <span className="text-hacker-green">+{submission.pointsAwarded}</span>
                   ) : (
-                    <span className="text-zinc-700">—</span>
+                    <span className="text-light-grey">—</span>
                   )}
                 </div>
               </div>

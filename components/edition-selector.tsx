@@ -23,7 +23,7 @@ export function EditionSelector({ editions, currentId, basePath }: EditionSelect
 
   return (
     <div className="flex items-start gap-3 font-mono text-xs">
-      <span className="text-zinc-700 shrink-0 mt-1.5">{"// edition:"}</span>
+      <span className="text-light-grey shrink-0 mt-1.5">{"// edition:"}</span>
       <div className="flex flex-wrap gap-1.5">
         {editions.map((ed) => (
           <button
@@ -39,12 +39,12 @@ export function EditionSelector({ editions, currentId, basePath }: EditionSelect
               "px-2.5 py-1 rounded border transition-all duration-150",
               ed.id === currentId
                 ? "border-purple-500/40 bg-purple-500/10 text-purple-300"
-                : "border-zinc-800 text-zinc-600 hover:text-zinc-300 hover:border-zinc-600"
+                : "border-zinc-800 text-light-grey hover:text-zinc-300 hover:border-zinc-600"
             )}
           >
             <span>{ed.name}</span>
             {ed.isActive && (
-              <span className="ml-1.5 text-green-400 text-[10px]">●</span>
+              <span className="ml-1.5 text-hacker-green text-[10px]">●</span>
             )}
           </button>
         ))}
