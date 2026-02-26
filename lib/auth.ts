@@ -7,8 +7,11 @@ import * as schema from "./db/schema";
 export async function createAuth() {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
+  const cfEnv = env as unknown as Record<string, string | undefined>;
 
   return betterAuth({
+    secret: cfEnv.BETTER_AUTH_SECRET,
+    baseURL: cfEnv.BETTER_AUTH_URL,
     database: drizzleAdapter(db, {
       provider: "sqlite",
       schema: {

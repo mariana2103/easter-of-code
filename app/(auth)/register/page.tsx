@@ -14,17 +14,26 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setError(null);
     startTransition(async () => {
       const res = await signUp.email({
         email,
         password,
         name: username,
-      });
+        username,
+      } as Parameters<typeof signUp.email>[0]);
       if (res.error) {
-        setError(res.error.message ?? "registration_failed");
+        const msg = res.error.message ?? "";
+        if (msg.includes("email") || res.error.status === 422) {
+          // Check if it's a duplicate — better-auth returns generic "Failed to create user"
+          // Try to give a useful hint based on what's likely conflicting
+          setError(msg === "Failed to create user"
+            ? "email or username already taken"
+            : msg);
+        } else {
+          setError(msg || "registration_failed");
+        }
       } else {
         router.push("/challenges");
       }
@@ -47,7 +56,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-4">
         <div className="space-y-1">
           <label className="font-mono text-xs text-zinc-500">username</label>
           <div className="flex items-center border border-zinc-700 rounded bg-zinc-900 focus-within:ring-1 focus-within:ring-green-500/30 focus-within:border-green-500/40 transition-colors">

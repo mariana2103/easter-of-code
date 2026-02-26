@@ -13,8 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     setError(null);
     startTransition(async () => {
       const res = await signIn.email({ email, password });
@@ -42,7 +41,7 @@ export default function LoginPage() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="space-y-4">
         <div className="space-y-1">
           <label className="font-mono text-xs text-zinc-500">email</label>
           <input
