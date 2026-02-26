@@ -1,43 +1,109 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0a0a0a;
-  --foreground: #e4e4e7;
-  /* Define as tuas novas cores aqui para facilitar a manutenção */
-  --brand-primary: #d6d2d2; /* Amber 500 */
-  --brand-secondary: #8b5cf6; /* Violet 500 */
-  --color-brand: #f59e0b;
-}
-
 @theme {
-  --color-brand: #f59e0b;
-  --color-main-grey: #EBEBEB;
-  --color-light-grey: #d6d2d2;
-  --color-hacker-green: #3fdd79;
-  --color-hacker-red: #f07d66;
-  --color-hacker-yellow: #ffca37;
-  --color-hacker-purple: #a88af0;
+  /* ─── HACKER BRAND PALETTE ─────────────────────────────────────────── */
+  --color-hacker-green:   #3fdd79;  /* easy challenges, success, active states */
+  --color-hacker-red:     #f07d66;  /* hard challenges, errors */
+  --color-hacker-yellow:  #ffca37;  /* sponsored challenges, admin */
+  --color-hacker-purple:  #a88af0;  /* keywords, rank highlights, register accent */
+
+  /* ─── BRAND ──────────────────────────────────────────────────────────── */
+  --color-brand:          #ffca37;  /* primary brand (= hacker-yellow) */
+  --color-brand-amber:    #f59e0b;  /* amber brand variant */
+  --color-brand-violet:   #8b5cf6;  /* violet secondary */
+
+  /* ─── SEMANTIC CHALLENGE TYPES ──────────────────────────────────────── */
+  --color-easy:           #3fdd79;  /* = hacker-green */
+  --color-hard:           #f07d66;  /* = hacker-red */
+  --color-sponsored:      #ffca37;  /* = hacker-yellow */
+
+  /* ─── SYNTAX HIGHLIGHTING ────────────────────────────────────────────── */
+  --color-syntax-keyword: #a88af0;  /* import, const, interface … */
+  --color-syntax-method:  #60a5fa;  /* function / method names */
+  --color-syntax-type:    #22d3ee;  /* type / class names */
+  --color-syntax-string:  #3fdd79;  /* string literals */
+
+  /* ─── BACKGROUNDS ────────────────────────────────────────────────────── */
+  --color-background:     #0a0a0a;  /* page background */
+  --color-footer-bg:      #050505;  /* footer background */
+  --color-surface:        #09090b;  /* darkest surface, pre blocks */
+  --color-surface-raised: #18181b;  /* code block / inline code bg */
+
+  /* ─── TEXT ───────────────────────────────────────────────────────────── */
+  --color-foreground:     #e4e4e7;  /* primary text */
+  --color-muted:          #a1a1aa;  /* muted headings */
+  --color-subtle:         #d4d4d8;  /* subtle body text */
+  --color-main-grey:      #ebebeb;  /* main grey text */
+  --color-light-grey:     #d6d2d2;  /* light grey, placeholders, comments */
+
+  /* ─── BORDERS ─────────────────────────────────────────────────────────── */
+  --color-border:         #27272a;  /* standard border */
+  --color-border-muted:   #3f3f46;  /* muted border, scrollbar thumb */
+
+  /* ─── PROSE ──────────────────────────────────────────────────────────── */
+  --color-prose-code:     #86efac;  /* inline code text */
+  --color-prose-heading:  #a1a1aa;  /* prose h1/h2/h3 */
+  --color-prose-body:     #d4d4d8;  /* prose paragraphs and lists */
+
+  /* ─── SELECTION ──────────────────────────────────────────────────────── */
+  --color-selection-text: #dcfce7;  /* selected text color */
+
+  /* ─── GREEN SCALE ─────────────────────────────────────────────────────── */
+  --color-green-300:      #86efac;
+  --color-green-400:      #4ade80;
+  --color-green-500:      #22c55e;
+  --color-green-800:      #166534;
+  --color-green-950:      #052e16;
+
+  /* ─── RED SCALE ───────────────────────────────────────────────────────── */
+  --color-red-400:        #f87171;
+  --color-red-500:        #ef4444;
+  --color-red-950:        #450a0a;
+
+  /* ─── AMBER SCALE ─────────────────────────────────────────────────────── */
+  --color-amber-400:      #fbbf24;
+  --color-amber-500:      #f59e0b;
+  --color-amber-600:      #d97706;
+
+  /* ─── PURPLE SCALE ────────────────────────────────────────────────────── */
+  --color-purple-300:     #d8b4fe;
+  --color-purple-500:     #a855f7;
+
+  /* ─── CYAN & BLUE ─────────────────────────────────────────────────────── */
+  --color-cyan-400:       #22d3ee;
+  --color-blue-400:       #60a5fa;
+
+  /* ─── ZINC SCALE ──────────────────────────────────────────────────────── */
+  --color-zinc-100:       #f4f4f5;
+  --color-zinc-200:       #e4e4e7;
+  --color-zinc-300:       #d4d4d8;
+  --color-zinc-400:       #a1a1aa;
+  --color-zinc-500:       #71717a;
+  --color-zinc-600:       #52525b;
+  --color-zinc-700:       #3f3f46;
+  --color-zinc-800:       #27272a;
+  --color-zinc-900:       #18181b;
+  --color-zinc-950:       #09090b;
 }
 
 * {
   box-sizing: border-box;
-  --color-brand: #ffca37;
 }
 
 html, body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-background);
+  color: var(--color-foreground);
   font-family: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
   min-height: 100vh;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--color-background); }
+::-webkit-scrollbar-thumb { background: var(--color-border-muted); border-radius: 3px; }
 
 /* Selection */
-::selection { background: rgba(34, 197, 94, 0.2); color: #dcfce7; }
+::selection { background: rgba(34, 197, 94, 0.2); color: var(--color-selection-text); }
 
 /* Scanline overlay */
 .scanline::after {
@@ -59,27 +125,27 @@ html, body {
 .challenge-body h1,
 .challenge-body h2,
 .challenge-body h3 {
-  color: #a1a1aa;
+  color: var(--color-prose-heading);
   margin: 1.25rem 0 0.5rem;
   font-size: 0.875rem;
 }
 .challenge-body p {
-  color: #d4d4d8;
+  color: var(--color-prose-body);
   margin: 0.5rem 0;
   line-height: 1.75;
   font-size: 0.8125rem;
 }
 .challenge-body code {
-  background: #18181b;
-  border: 1px solid #27272a;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
   padding: 0.125rem 0.375rem;
   border-radius: 4px;
   font-size: 0.8125rem;
-  color: #86efac;
+  color: var(--color-prose-code);
 }
 .challenge-body pre {
-  background: #09090b;
-  border: 1px solid #27272a;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   padding: 1rem;
   border-radius: 6px;
   overflow-x: auto;
@@ -93,7 +159,7 @@ html, body {
 .challenge-body ul, .challenge-body ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
-  color: #d4d4d8;
+  color: var(--color-prose-body);
   font-size: 0.8125rem;
   line-height: 1.75;
 }

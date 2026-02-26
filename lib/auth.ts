@@ -18,9 +18,13 @@ export async function createAuth() {
     secret: cfEnv.BETTER_AUTH_SECRET,
     baseURL: baseURL,
     
-    // Isto é o que realmente resolve o 403 na Cloudflare
     trustedOrigins: [
-        "https://acm-hackathon.mariana-almeida.workers.dev"
+      "https://acm-hackathon.mariana-almeida.workers.dev",
+      // local dev — next dev picks a free port so cover common ones
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost:3009",
     ],
 
     database: drizzleAdapter(db, {
