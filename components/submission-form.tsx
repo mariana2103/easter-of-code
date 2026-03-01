@@ -24,7 +24,7 @@ export function SubmissionForm({
 
   const maxed = attempts >= MAX_ATTEMPTS;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: { preventDefault(): void }) => {
     e.preventDefault();
     if (!answer.trim() || isPending || maxed) return;
 
@@ -146,11 +146,15 @@ export function SubmissionForm({
           {!result.success && result.error === "challenge_locked" && (
             <span>{"error: challenge_locked — wait for unlock"}</span>
           )}
+          {!result.success && result.error === "rate_limited" && (
+            <span>{"error: rate_limited — wait 3s between submissions"}</span>
+          )}
           {!result.success &&
             result.error !== "already_solved" &&
             result.error !== "max_attempts_reached" &&
             result.error !== "not_authenticated" &&
-            result.error !== "challenge_locked" && (
+            result.error !== "challenge_locked" &&
+            result.error !== "rate_limited" && (
               <span>{`error: ${result.error}`}</span>
             )}
         </div>

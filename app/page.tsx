@@ -137,10 +137,10 @@ export default async function HomePage() {
                 </Link>
                 {!session && (
                   <Link
-                    href="/register"
+                    href="/login"
                     className="font-mono text-sm text-main-grey hover:text-zinc-300 transition-colors"
                   >
-                    {"register →"}
+                    {"sign_in →"}
                   </Link>
                 )}
               </div>

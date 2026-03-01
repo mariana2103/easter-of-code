@@ -153,38 +153,62 @@ export default async function AdminPage() {
             allChallenges.map((ch) => {
               const edition = allEditions.find((e) => e.id === ch.editionId);
               return (
-                <div
-                  key={ch.id}
-                  className="flex items-center justify-between px-4 py-3 border-b border-zinc-800/50 last:border-0 hover:bg-zinc-900/20 transition-colors gap-4"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-mono text-xs text-light-grey shrink-0">d{ch.day}</span>
-                    <span
-                      className={`font-mono text-xs shrink-0 ${
-                        ch.type === "easy"
-                          ? "text-green-500"
-                          : ch.type === "hard"
-                          ? "text-red-500"
-                          : "text-amber-500"
-                      }`}
-                    >
-                      {`<${ch.type} />`}
-                    </span>
-                    <span className="font-mono text-sm text-zinc-300 truncate">{ch.title}</span>
-                    {ch.sponsorName && (
-                      <span className="font-mono text-xs text-light-grey shrink-0">
-                        {`/* ${ch.sponsorName} */`}
+                <div key={ch.id} className="border-b border-zinc-800/50 last:border-0">
+                  <div className="flex items-center justify-between px-4 py-3 hover:bg-zinc-900/20 transition-colors gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="font-mono text-xs text-light-grey shrink-0">d{ch.day}</span>
+                      <span
+                        className={`font-mono text-xs shrink-0 ${
+                          ch.type === "easy"
+                            ? "text-green-500"
+                            : ch.type === "hard"
+                            ? "text-red-500"
+                            : "text-amber-500"
+                        }`}
+                      >
+                        {`<${ch.type} />`}
                       </span>
-                    )}
+                      <span className="font-mono text-sm text-zinc-300 truncate">{ch.title}</span>
+                      {ch.sponsorName && (
+                        <span className="font-mono text-xs text-light-grey shrink-0">
+                          {`/* ${ch.sponsorName} */`}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="font-mono text-xs text-light-grey">
+                        {edition?.name.split(" ").pop()}
+                      </span>
+                      <form action={deleteChallenge.bind(null, ch.id)}>
+                        <DeleteChallengeButton title={ch.title} />
+                      </form>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="font-mono text-xs text-light-grey">
-                      {edition?.name.split(" ").pop()}
-                    </span>
-                    <form action={deleteChallenge.bind(null, ch.id)}>
-                      <DeleteChallengeButton title={ch.title} />
+                  {/* Inline edit form */}
+                  <details className="border-t border-zinc-800/40">
+                    <summary className="px-4 py-2 font-mono text-xs text-light-grey cursor-pointer hover:text-main-grey transition-colors select-none">
+                      {"  edit_challenge()"}
+                    </summary>
+                    <form action={updateChallenge.bind(null, ch.id)} className="px-4 pb-4 space-y-3 mt-2">
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        <FormField label="title" name="title" defaultValue={ch.title} required />
+                        <FormField label="answer" name="answer" defaultValue={ch.answer} required />
+                        <FormField label="sponsor_name" name="sponsorName" defaultValue={ch.sponsorName ?? ""} />
+                        <FormField label="sponsor_logo_url" name="sponsorLogo" defaultValue={ch.sponsorLogo ?? ""} />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="font-mono text-xs text-main-grey">description (markdown)</label>
+                        <textarea
+                          name="description"
+                          required
+                          rows={6}
+                          defaultValue={ch.description}
+                          className={`${inputCls} resize-y`}
+                        />
+                      </div>
+                      <button type="submit" className={adminBtn}>save_challenge()</button>
                     </form>
-                  </div>
+                  </details>
                 </div>
               );
             })
@@ -284,12 +308,14 @@ function FormField({
   placeholder,
   type = "text",
   required,
+  defaultValue,
 }: {
   label: string;
   name: string;
   placeholder?: string;
   type?: string;
   required?: boolean;
+  defaultValue?: string;
 }) {
   return (
     <div className="space-y-1">
@@ -299,6 +325,7 @@ function FormField({
         name={name}
         placeholder={placeholder}
         required={required}
+        defaultValue={defaultValue}
         className={inputCls}
       />
     </div>

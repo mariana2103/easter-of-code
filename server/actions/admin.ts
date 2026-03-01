@@ -20,15 +20,47 @@ async function requireAdmin() {
   return session;
 }
 
+// ── Input validation helpers ──────────────────────────────────────────────
+
+function requireString(value: FormDataEntryValue | null, field: string, max: number): string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`${field} is required`);
+  }
+  if (value.length > max) throw new Error(`${field} exceeds max length of ${max}`);
+  return value.trim();
+}
+
+function optionalString(value: FormDataEntryValue | null, max: number): string | null {
+  if (typeof value !== "string" || value.trim().length === 0) return null;
+  if (value.length > max) throw new Error(`Value exceeds max length of ${max}`);
+  return value.trim();
+}
+
+/** Only allows https:// URLs to prevent data: / javascript: injection */
+function requireHttpsUrl(value: FormDataEntryValue | null): string | null {
+  if (typeof value !== "string" || value.trim().length === 0) return null;
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol !== "https:") throw new Error("URL must use https://");
+    return url.toString();
+  } catch {
+    throw new Error("Sponsor logo must be a valid https:// URL");
+  }
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+
 export async function createEdition(formData: FormData) {
   await requireAdmin();
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  const name = formData.get("name") as string;
-  const startDate = new Date(formData.get("startDate") as string);
-  const endDate = new Date(formData.get("endDate") as string);
-  const description = (formData.get("description") as string) || null;
+  const name = requireString(formData.get("name"), "name", 120);
+  const description = optionalString(formData.get("description"), 500);
+  const startDate = new Date(requireString(formData.get("startDate"), "startDate", 32));
+  const endDate = new Date(requireString(formData.get("endDate"), "endDate", 32));
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) throw new Error("Invalid dates");
+  if (endDate <= startDate) throw new Error("endDate must be after startDate");
 
   await db.insert(editions).values({
     id: generateId(),
@@ -63,20 +95,19 @@ export async function createChallenge(formData: FormData) {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  const editionId = formData.get("editionId") as string;
-  const day = parseInt(formData.get("day") as string, 10);
-  const type = formData.get("type") as "easy" | "hard" | "sponsored";
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const answer = formData.get("answer") as string;
-  const sponsorName = (formData.get("sponsorName") as string) || null;
-  const sponsorLogo = (formData.get("sponsorLogo") as string) || null;
+  const editionId = requireString(formData.get("editionId"), "editionId", 64);
+  const day = parseInt(requireString(formData.get("day"), "day", 2), 10);
+  const type = requireString(formData.get("type"), "type", 16) as "easy" | "hard" | "sponsored";
+  const title = requireString(formData.get("title"), "title", 200);
+  const description = requireString(formData.get("description"), "description", 20_000);
+  const answer = requireString(formData.get("answer"), "answer", 500);
+  const sponsorName = optionalString(formData.get("sponsorName"), 120);
+  const sponsorLogo = requireHttpsUrl(formData.get("sponsorLogo"));
 
-  const [edition] = await db
-    .select()
-    .from(editions)
-    .where(eq(editions.id, editionId))
-    .limit(1);
+  if (isNaN(day) || day < 1 || day > 7) throw new Error("day must be 1-7");
+  if (!["easy", "hard", "sponsored"].includes(type)) throw new Error("Invalid type");
+
+  const [edition] = await db.select().from(editions).where(eq(editions.id, editionId)).limit(1);
   if (!edition) throw new Error("Edition not found");
 
   const unlocksAt = new Date(edition.startDate);
@@ -106,11 +137,11 @@ export async function updateChallenge(challengeId: string, formData: FormData) {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  const title = formData.get("title") as string;
-  const description = formData.get("description") as string;
-  const answer = formData.get("answer") as string;
-  const sponsorName = (formData.get("sponsorName") as string) || null;
-  const sponsorLogo = (formData.get("sponsorLogo") as string) || null;
+  const title = requireString(formData.get("title"), "title", 200);
+  const description = requireString(formData.get("description"), "description", 20_000);
+  const answer = requireString(formData.get("answer"), "answer", 500);
+  const sponsorName = optionalString(formData.get("sponsorName"), 120);
+  const sponsorLogo = requireHttpsUrl(formData.get("sponsorLogo"));
 
   await db
     .update(challenges)
@@ -137,7 +168,8 @@ export async function deleteEdition(editionId: string) {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  // Delete all challenges belonging to this edition first
+  // D1 doesn't support SQL BEGIN TRANSACTION via Drizzle's db.transaction().
+  // Delete challenges first (FK references edition), then the edition itself.
   await db.delete(challenges).where(eq(challenges.editionId, editionId));
   await db.delete(editions).where(eq(editions.id, editionId));
 
@@ -151,10 +183,12 @@ export async function updateEdition(editionId: string, formData: FormData) {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  const name = formData.get("name") as string;
-  const startDate = new Date(formData.get("startDate") as string);
-  const endDate = new Date(formData.get("endDate") as string);
-  const description = (formData.get("description") as string) || null;
+  const name = requireString(formData.get("name"), "name", 120);
+  const description = optionalString(formData.get("description"), 500);
+  const startDate = new Date(requireString(formData.get("startDate"), "startDate", 32));
+  const endDate = new Date(requireString(formData.get("endDate"), "endDate", 32));
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) throw new Error("Invalid dates");
+  if (endDate <= startDate) throw new Error("endDate must be after startDate");
 
   await db
     .update(editions)

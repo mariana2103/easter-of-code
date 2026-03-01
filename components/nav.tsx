@@ -118,20 +118,12 @@ export function Nav() {
               )}
             </div>
           ) : (
-            <>
-              <Link
-                href="/login"
-                className="font-mono text-xs text-main-grey hover:text-zinc-200 transition-colors"
-              >
-                login
-              </Link>
-              <Link
-                href="/register"
-                className="font-mono text-xs bg-green-500/10 text-hacker-green border border-green-500/30 px-3 py-1.5 rounded hover:bg-green-500/20 transition-colors"
-              >
-                register
-              </Link>
-            </>
+            <Link
+              href="/login"
+              className="font-mono text-xs bg-green-500/10 text-hacker-green border border-green-500/30 px-3 py-1.5 rounded hover:bg-green-500/20 transition-colors"
+            >
+              sign_in()
+            </Link>
           )}
         </div>
       </nav>

@@ -58,6 +58,14 @@ export async function submitAnswer(
 
   if (attempts.length >= 30) return { success: false, error: "max_attempts_reached" };
 
+  // Rate limit: one submission every 3 seconds per user per challenge
+  const lastAttempt = attempts.sort((a, b) =>
+    b.submittedAt.getTime() - a.submittedAt.getTime()
+  )[0];
+  if (lastAttempt && now.getTime() - lastAttempt.submittedAt.getTime() < 3_000) {
+    return { success: false, error: "rate_limited" };
+  }
+
   const attemptNumber = attempts.length + 1;
   const normalise = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
   const isCorrect = normalise(rawAnswer) === normalise(challenge.answer);
@@ -70,11 +78,13 @@ export async function submitAnswer(
       )
     : 0;
 
+  // Do NOT store the raw answer — a DB breach must not expose what users submitted.
+  // The schema column is NOT NULL so we store an empty sentinel.
   await db.insert(submissions).values({
     id: generateId(),
     userId,
     challengeId,
-    answer: rawAnswer.trim(),
+    answer: "",
     isCorrect,
     attemptNumber,
     pointsAwarded,
