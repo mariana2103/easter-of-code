@@ -5,14 +5,14 @@ export default function Footer() {
     
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 text-zinc-100 text-base font-bold tracking-tight">
-            <span className="text-brand">{"<"}</span>
+            <span className="text-brand-violet">{"<"}</span>
             ACM FEUP
-            <span className="text-brand">{">"}</span>
+            <span className="text-brand-violet">{">"}</span>
           </div>
           
           <div className="h-4 w-[1px] bg-zinc-800 hidden sm:block" /> 
           
-          <span className="text-[5px] text-zinc-700 uppercase tracking-[0.2em] leading-none">
+          <span className="text-[10px] text-zinc-700 uppercase tracking-[0.2em] leading-none">
             © 2026 all rights reserved
           </span>
         </div>

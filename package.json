@@ -4,17 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --webpack",
     "build:cloudflare": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 execute acm-hackathon-db --local --file=./drizzle/0000_dizzy_power_pack.sql",
     "db:migrate:remote": "wrangler d1 execute acm-hackathon-db --remote --file=./drizzle/0000_dizzy_power_pack.sql",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@sentry/cloudflare": "^10.40.0",
     "@sentry/nextjs": "^10.40.0",
     "better-auth": "^1.4.19",
     "clsx": "^2.1.1",

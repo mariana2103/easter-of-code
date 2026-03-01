@@ -1,89 +1,105 @@
 @import "tailwindcss";
 
+/* ╔═══════════════════════════════════════════════════════════════════════╗ */
+/* ║              🥚  Easter of Code — Design Tokens  🥚                 ║ */
+/* ║  Navy dark bg · vivid pastel eggs · high-contrast whites             ║ */
+/* ╚═══════════════════════════════════════════════════════════════════════╝ */
+
 @theme {
-  /* ─── HACKER BRAND PALETTE ─────────────────────────────────────────── */
-  --color-hacker-green:   #3fdd79;  /* easy challenges, success, active states */
-  --color-hacker-red:     #f07d66;  /* hard challenges, errors */
-  --color-hacker-yellow:  #ffca37;  /* sponsored challenges, admin */
-  --color-hacker-purple:  #a88af0;  /* keywords, rank highlights, register accent */
+  /* ─── 🥚 EASTER EGG PALETTE ──────────────────────────────────────────── */
+  --color-egg-mint:        #4ade80;  /* bright mint green  — easy, success   */
+  --color-egg-rose:        #f472b6;  /* bright rose pink   — hard, errors    */
+  --color-egg-lemon:       #facc15;  /* bright lemon       — sponsored       */
+  --color-egg-lilac:       #c084fc;  /* bright lilac       — keywords, rank  */
+  --color-egg-sky:         #38bdf8;  /* bright sky blue    — types, syntax   */
+  --color-egg-petal:       #fb7185;  /* coral petal        — accent          */
+  --color-egg-lavender:    #a78bfa;  /* soft lavender      — secondary       */
+
+  /* ─── SEMANTIC CHALLENGE COLORS ─────────────────────────────────────── */
+  --color-hacker-green:    #4ade80;
+  --color-hacker-red:      #f472b6;
+  --color-hacker-yellow:   #facc15;
+  --color-hacker-purple:   #c084fc;
+  --color-easter-blue:     #38bdf8;
+  --color-easter-pink:     #fb7185;
 
   /* ─── BRAND ──────────────────────────────────────────────────────────── */
-  --color-brand:          #ffca37;  /* primary brand (= hacker-yellow) */
-  --color-brand-amber:    #f59e0b;  /* amber brand variant */
-  --color-brand-violet:   #8b5cf6;  /* violet secondary */
+  --color-brand:           #facc15;
+  --color-brand-amber:     #fde047;
+  --color-brand-violet:    #c084fc;
 
-  /* ─── SEMANTIC CHALLENGE TYPES ──────────────────────────────────────── */
-  --color-easy:           #3fdd79;  /* = hacker-green */
-  --color-hard:           #f07d66;  /* = hacker-red */
-  --color-sponsored:      #ffca37;  /* = hacker-yellow */
+  /* ─── SEMANTIC ALIASES ───────────────────────────────────────────────── */
+  --color-easy:            #4ade80;
+  --color-hard:            #f472b6;
+  --color-sponsored:       #facc15;
 
   /* ─── SYNTAX HIGHLIGHTING ────────────────────────────────────────────── */
-  --color-syntax-keyword: #a88af0;  /* import, const, interface … */
-  --color-syntax-method:  #60a5fa;  /* function / method names */
-  --color-syntax-type:    #22d3ee;  /* type / class names */
-  --color-syntax-string:  #3fdd79;  /* string literals */
+  --color-syntax-keyword:  #c084fc;
+  --color-syntax-method:   #38bdf8;
+  --color-syntax-type:     #38bdf8;
+  --color-syntax-string:   #4ade80;
 
-  /* ─── BACKGROUNDS ────────────────────────────────────────────────────── */
-  --color-background:     #0a0a0a;  /* page background */
-  --color-footer-bg:      #050505;  /* footer background */
-  --color-surface:        #09090b;  /* darkest surface, pre blocks */
-  --color-surface-raised: #18181b;  /* code block / inline code bg */
+  /* ─── BACKGROUNDS (Deep Navy) ────────────────────────────────────────── */
+  --color-background:      #0a1628;  /* deep navy */
+  --color-footer-bg:       #07101e;
+  --color-surface:         #0f1f3a;
+  --color-surface-raised:  #162847;
 
-  /* ─── TEXT ───────────────────────────────────────────────────────────── */
-  --color-foreground:     #e4e4e7;  /* primary text */
-  --color-muted:          #a1a1aa;  /* muted headings */
-  --color-subtle:         #d4d4d8;  /* subtle body text */
-  --color-main-grey:      #ebebeb;  /* main grey text */
-  --color-light-grey:     #d6d2d2;  /* light grey, placeholders, comments */
+  /* ─── TEXT (high contrast against navy) ─────────────────────────────── */
+  --color-foreground:      #f0f6ff;  /* bright white-blue */
+  --color-main-grey:       #d4e2f4;  /* light blue-white */
+  --color-light-grey:      #8ba8c8;  /* medium blue-grey */
+  --color-muted:           #6b8aaa;
+  --color-subtle:          #a8c0d8;
 
-  /* ─── BORDERS ─────────────────────────────────────────────────────────── */
-  --color-border:         #27272a;  /* standard border */
-  --color-border-muted:   #3f3f46;  /* muted border, scrollbar thumb */
+  /* ─── BORDERS ────────────────────────────────────────────────────────── */
+  --color-border:          #1e3a5c;
+  --color-border-muted:    #2a4e78;
 
   /* ─── PROSE ──────────────────────────────────────────────────────────── */
-  --color-prose-code:     #86efac;  /* inline code text */
-  --color-prose-heading:  #a1a1aa;  /* prose h1/h2/h3 */
-  --color-prose-body:     #d4d4d8;  /* prose paragraphs and lists */
+  --color-prose-code:      #4ade80;
+  --color-prose-heading:   #c084fc;
+  --color-prose-body:      #a8c0d8;
 
   /* ─── SELECTION ──────────────────────────────────────────────────────── */
-  --color-selection-text: #dcfce7;  /* selected text color */
+  --color-selection-text:  #f0f6ff;
 
-  /* ─── GREEN SCALE ─────────────────────────────────────────────────────── */
-  --color-green-300:      #86efac;
-  --color-green-400:      #4ade80;
-  --color-green-500:      #22c55e;
-  --color-green-800:      #166534;
-  --color-green-950:      #052e16;
+  /* ─── GREEN SCALE  (egg-mint) ─────────────────────────────────────────── */
+  --color-green-300:       #86efac;
+  --color-green-400:       #4ade80;
+  --color-green-500:       #22c55e;
+  --color-green-800:       #166534;
+  --color-green-950:       #052e16;
 
-  /* ─── RED SCALE ───────────────────────────────────────────────────────── */
-  --color-red-400:        #f87171;
-  --color-red-500:        #ef4444;
-  --color-red-950:        #450a0a;
+  /* ─── PINK/RED SCALE  (egg-rose) ──────────────────────────────────────── */
+  --color-red-400:         #f472b6;
+  --color-red-500:         #ec4899;
+  --color-red-950:         #500724;
 
-  /* ─── AMBER SCALE ─────────────────────────────────────────────────────── */
-  --color-amber-400:      #fbbf24;
-  --color-amber-500:      #f59e0b;
-  --color-amber-600:      #d97706;
+  /* ─── AMBER SCALE  (egg-lemon) ────────────────────────────────────────── */
+  --color-amber-400:       #facc15;
+  --color-amber-500:       #eab308;
+  --color-amber-600:       #ca8a04;
 
-  /* ─── PURPLE SCALE ────────────────────────────────────────────────────── */
-  --color-purple-300:     #d8b4fe;
-  --color-purple-500:     #a855f7;
+  /* ─── PURPLE SCALE  (egg-lilac) ───────────────────────────────────────── */
+  --color-purple-300:      #d8b4fe;
+  --color-purple-500:      #c084fc;
 
-  /* ─── CYAN & BLUE ─────────────────────────────────────────────────────── */
-  --color-cyan-400:       #22d3ee;
-  --color-blue-400:       #60a5fa;
+  /* ─── CYAN & BLUE  (egg-sky) ──────────────────────────────────────────── */
+  --color-cyan-400:        #38bdf8;
+  --color-blue-400:        #60a5fa;
 
-  /* ─── ZINC SCALE ──────────────────────────────────────────────────────── */
-  --color-zinc-100:       #f4f4f5;
-  --color-zinc-200:       #e4e4e7;
-  --color-zinc-300:       #d4d4d8;
-  --color-zinc-400:       #a1a1aa;
-  --color-zinc-500:       #71717a;
-  --color-zinc-600:       #52525b;
-  --color-zinc-700:       #3f3f46;
-  --color-zinc-800:       #27272a;
-  --color-zinc-900:       #18181b;
-  --color-zinc-950:       #09090b;
+  /* ─── ZINC SCALE  (navy-tinted) ───────────────────────────────────────── */
+  --color-zinc-100:        #e8f0fc;
+  --color-zinc-200:        #cddaf0;
+  --color-zinc-300:        #a8c0dc;
+  --color-zinc-400:        #6b8aaa;
+  --color-zinc-500:        #4a6585;
+  --color-zinc-600:        #2e4a68;
+  --color-zinc-700:        #1e3552;
+  --color-zinc-800:        #162847;
+  --color-zinc-900:        #0f1f3a;
+  --color-zinc-950:        #0a1628;
 }
 
 * {
@@ -102,8 +118,27 @@ html, body {
 ::-webkit-scrollbar-track { background: var(--color-background); }
 ::-webkit-scrollbar-thumb { background: var(--color-border-muted); border-radius: 3px; }
 
-/* Selection */
-::selection { background: rgba(34, 197, 94, 0.2); color: var(--color-selection-text); }
+/* Selection — Easter lilac */
+::selection { background: rgba(192, 132, 252, 0.3); color: var(--color-selection-text); }
+
+/* ── Easter Egg shape utility ───────────────────────────────────────────── */
+.egg {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+/* ── Easter egg float animations ────────────────────────────────────────── */
+@keyframes egg-float {
+  0%, 100% { transform: translateY(0)    rotate(-4deg); }
+  50%       { transform: translateY(-12px) rotate(4deg); }
+}
+@keyframes egg-sway {
+  0%, 100% { transform: translateY(0)   rotate(6deg); }
+  50%       { transform: translateY(-8px) rotate(-6deg); }
+}
+@keyframes egg-drift {
+  0%, 100% { transform: translateY(0)    rotate(-2deg) scale(1); }
+  50%       { transform: translateY(-16px) rotate(2deg) scale(1.05); }
+}
 
 /* Scanline overlay */
 .scanline::after {
@@ -121,13 +156,14 @@ html, body {
   z-index: 1;
 }
 
-/* Prose-like code block styling for challenge descriptions */
+/* ── Challenge description prose ───────────────────────────────────────── */
 .challenge-body h1,
 .challenge-body h2,
 .challenge-body h3 {
   color: var(--color-prose-heading);
   margin: 1.25rem 0 0.5rem;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 .challenge-body p {
   color: var(--color-prose-body);
@@ -155,11 +191,15 @@ html, body {
   background: none;
   border: none;
   padding: 0;
+  color: var(--color-prose-body);
 }
-.challenge-body ul, .challenge-body ol {
+.challenge-body ul,
+.challenge-body ol {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
   color: var(--color-prose-body);
   font-size: 0.8125rem;
   line-height: 1.75;
 }
+.challenge-body li { margin: 0.25rem 0; }
+.challenge-body strong { color: var(--color-main-grey); font-weight: 600; }

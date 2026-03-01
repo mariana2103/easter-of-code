@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getDB } from "@/lib/db";
 import { challenges, editions, submissions } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { createAuth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { SubmissionForm } from "@/components/submission-form";
@@ -11,6 +11,7 @@ import type { Metadata } from "next";
 
 interface Props {
   params: Promise<{ day: string; type: string }>;
+  searchParams: Promise<{ edition?: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -18,8 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `Day ${day} · ${type} — Easter of code` };
 }
 
-export default async function ChallengePage({ params }: Props) {
+export default async function ChallengePage({ params, searchParams }: Props) {
   const { day: dayStr, type } = await params;
+  const { edition: editionSlug } = await searchParams;
   const day = parseInt(dayStr, 10);
 
   if (isNaN(day) || day < 1 || day > 7 || !["easy", "hard", "sponsored"].includes(type)) {
@@ -29,12 +31,11 @@ export default async function ChallengePage({ params }: Props) {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDB(env.DB as D1Database);
 
-  // Get active edition
-  const [edition] = await db
-    .select()
-    .from(editions)
-    .where(eq(editions.isActive, true))
-    .limit(1);
+  // Resolve edition: by slug → active → most recent
+  const allEditions = await db.select().from(editions).orderBy(desc(editions.startDate));
+  const edition = editionSlug
+    ? (allEditions.find((e) => e.slug === editionSlug) ?? null)
+    : (allEditions.find((e) => e.isActive) ?? allEditions[0] ?? null);
 
   if (!edition) notFound();
 
@@ -196,23 +197,64 @@ export default async function ChallengePage({ params }: Props) {
   );
 }
 
-// Minimal markdown renderer — just enough for challenge descriptions
-// (In production, use a library like marked or remark)
-function renderMarkdown(md: string): string {
-  return md
+// Minimal markdown renderer — line-by-line to correctly handle code fences and lists
+function escapeHtml(s: string): string {
+  return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+    .replace(/"/g, "&quot;");
+}
+
+function inlineFormat(s: string): string {
+  return s
     .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h1>$1</h1>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
-    .replace(/^- (.+)$/gm, "<li>$1</li>")
-    .replace(/(<li>[\s\S]*?<\/li>)/g, "<ul>$1</ul>")
-    .replace(/\n\n/g, "</p><p>")
-    .replace(/^(?!<[hup])(.+)$/gm, "<p>$1</p>")
-    .replace(/<p><\/p>/g, "");
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+}
+
+function renderMarkdown(md: string): string {
+  if (!md) return "";
+  const lines = md.split("\n");
+  const out: string[] = [];
+  let inFence = false;
+  const fence: string[] = [];
+  let inList = false;
+
+  for (const line of lines) {
+    if (line.startsWith("```")) {
+      if (!inFence) {
+        if (inList) { out.push("</ul>"); inList = false; }
+        inFence = true;
+        fence.length = 0;
+      } else {
+        inFence = false;
+        out.push(`<pre><code>${escapeHtml(fence.join("\n"))}</code></pre>`);
+      }
+      continue;
+    }
+    if (inFence) { fence.push(line); continue; }
+
+    if (!line.startsWith("- ") && inList) { out.push("</ul>"); inList = false; }
+
+    if (line === "") {
+      out.push("");
+    } else if (line.startsWith("### ")) {
+      out.push(`<h3>${inlineFormat(escapeHtml(line.slice(4)))}</h3>`);
+    } else if (line.startsWith("## ")) {
+      out.push(`<h2>${inlineFormat(escapeHtml(line.slice(3)))}</h2>`);
+    } else if (line.startsWith("# ")) {
+      out.push(`<h1>${inlineFormat(escapeHtml(line.slice(2)))}</h1>`);
+    } else if (line.startsWith("- ")) {
+      if (!inList) { out.push("<ul>"); inList = true; }
+      out.push(`<li>${inlineFormat(escapeHtml(line.slice(2)))}</li>`);
+    } else {
+      out.push(`<p>${inlineFormat(escapeHtml(line))}</p>`);
+    }
+  }
+
+  if (inList) out.push("</ul>");
+  if (inFence) out.push(`<pre><code>${escapeHtml(fence.join("\n"))}</code></pre>`);
+
+  return out.join("\n");
 }

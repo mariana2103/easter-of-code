@@ -17,7 +17,4 @@
 			"database_id": "f19a5b23-6df8-4f98-97bd-fd1ea1bed65d"
 		}
 	],
-    "analytics_engine_datasets": [
-        { "binding": "ANALYTICS", "dataset": "website_events" }
-    ]
 }

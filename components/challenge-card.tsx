@@ -4,6 +4,7 @@ import type { Challenge } from "@/lib/db/schema";
 
 interface ChallengeCardProps {
   challenge: Challenge;
+  editionSlug: string;
   solved?: boolean;
   attempted?: boolean;
 }
@@ -39,7 +40,7 @@ function formatUnlockDelta(unlocksAt: Date, now: Date): string {
   return `in ${diffM}m`;
 }
 
-export function ChallengeCard({ challenge, solved, attempted }: ChallengeCardProps) {
+export function ChallengeCard({ challenge, editionSlug, solved, attempted }: ChallengeCardProps) {
   const now = new Date();
   const isLocked = now < challenge.unlocksAt;
   const styles = typeStyles[challenge.type];
@@ -76,7 +77,7 @@ export function ChallengeCard({ challenge, solved, attempted }: ChallengeCardPro
 
   return (
     <Link
-      href={`/challenges/${challenge.day}/${challenge.type}`}
+      href={`/challenges/${challenge.day}/${challenge.type}?edition=${editionSlug}`}
       className={cn(
         "block border border-zinc-800 rounded-lg p-4 bg-zinc-950 transition-all duration-200",
         "hover:shadow-lg hover:shadow-black/40",

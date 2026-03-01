@@ -56,6 +56,8 @@ export async function submitAnswer(
     .from(submissions)
     .where(and(eq(submissions.userId, userId), eq(submissions.challengeId, challengeId)));
 
+  if (attempts.length >= 30) return { success: false, error: "max_attempts_reached" };
+
   const attemptNumber = attempts.length + 1;
   const normalise = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
   const isCorrect = normalise(rawAnswer) === normalise(challenge.answer);

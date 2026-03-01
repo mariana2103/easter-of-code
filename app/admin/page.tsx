@@ -5,11 +5,15 @@ import { createAuth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { DeleteChallengeButton } from "@/components/delete-challenge-button";
+import { DeleteEditionButton } from "@/components/delete-edition-button";
 import {
   createEdition,
   setActiveEdition,
   createChallenge,
   deleteChallenge,
+  deleteEdition,
+  updateChallenge,
+  updateEdition,
 } from "@/server/actions/admin";
 
 export default async function AdminPage() {
@@ -53,33 +57,64 @@ export default async function AdminPage() {
             </div>
           ) : (
             allEditions.map((ed) => (
-              <div
-                key={ed.id}
-                className="flex items-center justify-between px-4 py-3 border-b border-zinc-800/50 last:border-0 hover:bg-zinc-900/20 transition-colors"
-              >
-                <div className="space-y-0.5">
-                  <div className="font-mono text-sm text-zinc-200 flex items-center gap-2">
-                    {ed.name}
-                    {ed.isActive && (
-                      <span className="font-mono text-xs border border-green-500/30 bg-green-500/10 text-hacker-green rounded px-1.5 py-0.5">
-                        active
-                      </span>
-                    )}
+              <div key={ed.id} className="border-b border-zinc-800/50 last:border-0">
+                <div className="flex items-center justify-between px-4 py-3 hover:bg-zinc-900/20 transition-colors">
+                  <div className="space-y-0.5">
+                    <div className="font-mono text-sm text-zinc-200 flex items-center gap-2">
+                      {ed.name}
+                      {ed.isActive && (
+                        <span className="font-mono text-xs border border-green-500/30 bg-green-500/10 text-hacker-green rounded px-1.5 py-0.5">
+                          active
+                        </span>
+                      )}
+                    </div>
+                    <div className="font-mono text-xs text-light-grey">
+                      {ed.startDate.toLocaleDateString()} – {ed.endDate.toLocaleDateString()}
+                    </div>
                   </div>
-                  <div className="font-mono text-xs text-light-grey">
-                    {ed.startDate.toLocaleDateString()} – {ed.endDate.toLocaleDateString()}
+                  <div className="flex items-center gap-2 shrink-0">
+                    {!ed.isActive && (
+                      <form action={setActiveEdition.bind(null, ed.id)}>
+                        <button
+                          type="submit"
+                          className="font-mono text-xs text-amber-400 border border-amber-500/30 bg-amber-500/5 rounded px-3 py-1.5 hover:bg-amber-500/15 transition-colors"
+                        >
+                          set_active()
+                        </button>
+                      </form>
+                    )}
+                    <form action={deleteEdition.bind(null, ed.id)}>
+                      <DeleteEditionButton name={ed.name} />
+                    </form>
                   </div>
                 </div>
-                {!ed.isActive && (
-                  <form action={setActiveEdition.bind(null, ed.id)}>
-                    <button
-                      type="submit"
-                      className="font-mono text-xs text-amber-400 border border-amber-500/30 bg-amber-500/5 rounded px-3 py-1.5 hover:bg-amber-500/15 transition-colors"
-                    >
-                      set_active()
-                    </button>
+                {/* Inline edit form */}
+                <details className="border-t border-zinc-800/40">
+                  <summary className="px-4 py-2 font-mono text-xs text-light-grey cursor-pointer hover:text-main-grey transition-colors select-none">
+                    {"  edit_edition()"}
+                  </summary>
+                  <form action={updateEdition.bind(null, ed.id)} className="px-4 pb-4 space-y-3 mt-2">
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <FormField label="name" name="name" defaultValue={ed.name} required />
+                      <FormField label="description" name="description" defaultValue={ed.description ?? ""} />
+                      <FormField
+                        label="start_date"
+                        name="startDate"
+                        type="datetime-local"
+                        defaultValue={ed.startDate.toISOString().slice(0, 16)}
+                        required
+                      />
+                      <FormField
+                        label="end_date"
+                        name="endDate"
+                        type="datetime-local"
+                        defaultValue={ed.endDate.toISOString().slice(0, 16)}
+                        required
+                      />
+                    </div>
+                    <button type="submit" className={adminBtn}>save_edition()</button>
                   </form>
-                )}
+                </details>
               </div>
             ))
           )}

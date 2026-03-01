@@ -8,6 +8,7 @@ import { createAuth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { BASE_POINTS } from "@/lib/scoring";
 
 async function requireAdmin() {
@@ -41,6 +42,7 @@ export async function createEdition(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/");
+  redirect("/admin");
 }
 
 export async function setActiveEdition(editionId: string) {
@@ -96,6 +98,7 @@ export async function createChallenge(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/challenges");
+  redirect("/admin");
 }
 
 export async function updateChallenge(challengeId: string, formData: FormData) {
@@ -126,5 +129,39 @@ export async function deleteChallenge(challengeId: string) {
   await db.delete(challenges).where(eq(challenges.id, challengeId));
 
   revalidatePath("/admin");
+  revalidatePath("/challenges");
+}
+
+export async function deleteEdition(editionId: string) {
+  await requireAdmin();
+  const { env } = await getCloudflareContext({ async: true });
+  const db = getDB(env.DB as D1Database);
+
+  // Delete all challenges belonging to this edition first
+  await db.delete(challenges).where(eq(challenges.editionId, editionId));
+  await db.delete(editions).where(eq(editions.id, editionId));
+
+  revalidatePath("/admin");
+  revalidatePath("/");
+  revalidatePath("/challenges");
+}
+
+export async function updateEdition(editionId: string, formData: FormData) {
+  await requireAdmin();
+  const { env } = await getCloudflareContext({ async: true });
+  const db = getDB(env.DB as D1Database);
+
+  const name = formData.get("name") as string;
+  const startDate = new Date(formData.get("startDate") as string);
+  const endDate = new Date(formData.get("endDate") as string);
+  const description = (formData.get("description") as string) || null;
+
+  await db
+    .update(editions)
+    .set({ name, slug: slugify(name), description, startDate, endDate })
+    .where(eq(editions.id, editionId));
+
+  revalidatePath("/admin");
+  revalidatePath("/");
   revalidatePath("/challenges");
 }

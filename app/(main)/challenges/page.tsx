@@ -216,6 +216,7 @@ export default async function ChallengesPage({ searchParams }: Props) {
                       <ChallengeCard
                         key={c.id}
                         challenge={c}
+                        editionSlug={edition.slug}
                         solved={solvedIds.has(c.id)}
                         attempted={attemptedIds.has(c.id)}
                       />
@@ -253,6 +254,7 @@ export default async function ChallengesPage({ searchParams }: Props) {
                 <div className="sm:w-1/2">
                   <ChallengeCard
                     challenge={dayMap["sponsored"]}
+                    editionSlug={edition.slug}
                     solved={solvedIds.has(dayMap["sponsored"].id)}
                     attempted={attemptedIds.has(dayMap["sponsored"].id)}
                   />
